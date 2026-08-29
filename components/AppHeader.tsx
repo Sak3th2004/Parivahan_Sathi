@@ -54,10 +54,11 @@ export function AppHeader({ ctaHref = "/chat", ctaLabel }: { ctaHref?: string; c
 
   const links = [
     { href: "/", label: t("Home", "होम") },
-    { href: "/about", label: t("About", "परिचय") },
-    { href: "/how-it-works", label: t("Process", "प्रक्रिया") },
+    { href: "/assist", label: t("Assist", "सहायता") },
     { href: "/services", label: t("Services", "सेवाएँ") },
-    { href: "/track", label: t("Track status", "स्थिति देखें") },
+    { href: "/simulator", label: t("Simulator", "सिम्युलेटर") },
+    { href: "/how-it-works", label: t("Process", "प्रक्रिया") },
+    { href: "/track", label: t("Track", "ट्रैक") },
   ];
 
   return (

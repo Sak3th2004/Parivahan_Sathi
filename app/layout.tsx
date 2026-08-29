@@ -4,6 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
 import { AccessibilityBar } from "@/components/AppHeader";
+import { EvaluatorTour } from "@/components/EvaluatorTour";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AccessibilityBar />
           <DisclaimerBar />
           {children}
+          <EvaluatorTour />
         </LanguageProvider>
       </body>
     </html>

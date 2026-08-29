@@ -32,7 +32,7 @@ export default function LandingPage() {
 
   return (
     <>
-      <AppHeader ctaHref="/chat" ctaLabel={t("Start assistance →", "सहायता शुरू करें →")} />
+      <AppHeader ctaHref="/assist" ctaLabel={t("Start assistance →", "सहायता शुरू करें →")} />
 
       <main className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6 sm:pt-14">
         {/* Hero */}
@@ -66,16 +66,16 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 className="rounded-md bg-brand-teal px-6 font-semibold text-white hover:bg-teal-800"
-                onClick={() => go()}
+                onClick={() => router.push("/assist")}
               >
                 {t("Begin assistance", "सहायता आरंभ करें")}{" "}
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
               <Link
-                href="/track"
+                href="/simulator"
                 className="rounded-md border border-teal-200 bg-white px-4 py-2.5 text-sm font-semibold text-teal-900 hover:bg-teal-50"
               >
-                {t("Track application", "आवेदन ट्रैक करें")}
+                {t("Interactive simulator", "इंटरैक्टिव सिम्युलेटर")}
               </Link>
             </div>
 
