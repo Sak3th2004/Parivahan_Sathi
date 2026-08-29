@@ -59,13 +59,13 @@ export type TimelineStep = {
 export function computeTimeline(data: ApplicationData, nowMs = Date.now()): TimelineStep[] {
   const elapsed = nowMs - data.filedAtMs;
   const stepNames = [
-    { en: "Application submitted", hi: "Application file ho gaya" },
-    { en: "Document verification", hi: "Documents verify ho rahe hain" },
+    { en: "Application submitted", hi: "आवेदन जमा हो गया" },
+    { en: "Document verification", hi: "दस्तावेज़ सत्यापन जारी" },
     {
       en: data.slotRequired ? "RTO visit & biometric" : "Officer approval",
-      hi: data.slotRequired ? "RTO visit + biometric" : "Officer approval",
+      hi: data.slotRequired ? "RTO उपस्थिति एवं बायोमेट्रिक" : "अधिकारी अनुमोदन",
     },
-    { en: "Certificate dispatched", hi: "Certificate ghar bhej diya" },
+    { en: "Certificate dispatched", hi: "प्रमाणपत्र प्रेषित" },
   ];
   return stepNames.map((step, i) => ({
     step: step.en,

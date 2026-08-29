@@ -11,9 +11,9 @@ import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/components/LanguageContext";
 
 const EXAMPLES = [
-  { en: "My license expired", hi: "मेरा लाइसेंस expire हो गया" },
-  { en: "I bought a used car", hi: "मैंने पुरानी गाड़ी खरीदी" },
-  { en: "Moved houses, need address change", hi: "घर बदला, address change चाहिए" },
+  { en: "My driving licence has expired", hi: "मेरा ड्राइविंग लाइसेंस समाप्त हो गया है" },
+  { en: "I purchased a used vehicle", hi: "मैंने प्रयुक्त वाहन खरीदा है" },
+  { en: "I require an address update", hi: "मुझे पते का अद्यतन आवश्यक है" },
 ];
 
 export default function LandingPage() {
@@ -32,7 +32,7 @@ export default function LandingPage() {
 
   return (
     <>
-      <AppHeader ctaHref="/chat" ctaLabel={t("Talk to Sathi →", "Sathi से बात करें →")} />
+      <AppHeader ctaHref="/chat" ctaLabel={t("Start assistance →", "सहायता शुरू करें →")} />
 
       <main className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6 sm:pt-14">
         {/* Hero */}
@@ -42,49 +42,54 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
           >
-            <p className="mb-3 text-sm font-semibold tracking-wide text-brand-teal">
-              Parivahan Sathi
+            <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white/80 px-3 py-1 text-xs font-semibold text-teal-800">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              {t(
+                "Independent prototype · Civtech assistance layer",
+                "स्वतंत्र प्रोटोटाइप · नागरिक सहायता परत"
+              )}
             </p>
             <h1 className="max-w-xl text-4xl font-bold leading-[1.1] tracking-tight text-teal-950 sm:text-5xl">
-              {t("RTO paperwork,", "RTO कागज़,")}{" "}
+              {t("Complete RTO services with clarity.", "RTO सेवाएँ स्पष्टता के साथ पूर्ण करें।")}{" "}
               <span className="text-brand-teal">
-                {t("checked before you file it.", "फाइल करने से पहले चेक।")}
+                {t("Eligibility checked before filing.", "फाइलिंग से पहले पात्रता जाँच।")}
               </span>
             </h1>
             <p className="mt-4 max-w-lg text-base leading-relaxed text-slate-600 sm:text-lg">
               {t(
-                "45+ confusing forms. Average 4 RTO visits. Sathi understands Hindi, English or Hinglish — catches medical certs, NOCs and retests — then files and tracks.",
-                "45+ भ्रामक फॉर्म। औसत 4 RTO विज़िट। Sathi हिंदी, अंग्रेज़ी या हिंग्लिश समझता है — medical, NOC, retest पहले पकड़ता है — फिर फाइल और ट्रैक।"
+                "Citizens face dozens of forms and repeated office visits. Parivahan Sathi assists in Hindi or English: retrieves a synthetic profile, applies CMV-style rules, then files and tracks — without live government systems.",
+                "नागरिकों के समक्ष अनेक फॉर्म एवं बार-बार कार्यालय जाना पड़ता है। परिवहन साथी हिंदी या अंग्रेज़ी में सहायता करता है: सिंथेटिक प्रोफ़ाइल प्राप्त करता है, CMV-शैली नियम लागू करता है, फिर फाइल एवं ट्रैक करता है — बिना लाइव सरकारी प्रणालियों के।"
               )}
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Button
                 size="lg"
-                className="rounded-full bg-[#D9F99D] px-6 font-semibold text-teal-950 hover:bg-[#bef264]"
+                className="rounded-md bg-brand-teal px-6 font-semibold text-white hover:bg-teal-800"
                 onClick={() => go()}
               >
-                {t("Check my case", "मेरा केस चेक करें")} <ArrowRight className="ml-1 h-4 w-4" />
+                {t("Begin assistance", "सहायता आरंभ करें")}{" "}
+                <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
               <Link
-                href="/how-it-works"
-                className="text-sm font-medium text-teal-800 underline-offset-4 hover:underline"
+                href="/track"
+                className="rounded-md border border-teal-200 bg-white px-4 py-2.5 text-sm font-semibold text-teal-900 hover:bg-teal-50"
               >
-                {t("See how it works", "कैसे काम करता है देखें")}
+                {t("Track application", "आवेदन ट्रैक करें")}
               </Link>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
-                t("Any DL number", "कोई भी DL"),
-                t("Eligibility first", "पहले पात्रता"),
-                t("Right form", "सही फॉर्म"),
-                t("Live tracker", "लाइव ट्रैकर"),
-                t("Voice-ready", "आवाज़ से"),
-              ].map((chip) => (
-                <span key={chip} className="ps-chip">
-                  {chip}
-                </span>
+                { n: "30cr+", l: t("DL holders served by RTO maze", "DL धारक · जटिल प्रक्रिया") },
+                { n: "0", l: t("Live gov systems touched", "लाइव सरकारी सिस्टम स्पर्श") },
+                { n: "5", l: t("Assisted service types", "सहायता सेवा प्रकार") },
+                { n: "100%", l: t("Synthetic demo data", "सिंथेटिक डेमो डेटा") },
+              ].map((m) => (
+                <div key={m.l} className="rounded-xl border border-teal-100 bg-white/80 px-3 py-2.5">
+                  <p className="text-lg font-bold text-brand-teal">{m.n}</p>
+                  <p className="text-[11px] leading-snug text-slate-500">{m.l}</p>
+                </div>
               ))}
             </div>
           </motion.div>
@@ -283,16 +288,98 @@ export default function LandingPage() {
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-slate-600">
             {t(
-              "Citizen records, slots and filing are synthetic. GPT only reasons over generated data — it never invents the DL facts. Production path: Vahan/Sarathi, DigiLocker, UPI, Aadhaar OTP.",
-              "नागरिक रिकॉर्ड, स्लॉट और फाइलिंग सिंथेटिक हैं। GPT केवल जनरेटेड डेटा पर सोचता है — DL तथ्य नहीं गढ़ता। प्रोडक्शन: Vahan/Sarathi, DigiLocker, UPI, Aadhaar OTP।"
+              "Citizen records, slots and filing are synthetic. The language model only reasons over generated data — it never invents licence facts. This is not an official government portal.",
+              "नागरिक रिकॉर्ड, स्लॉट और फाइलिंग सिंथेटिक हैं। भाषा मॉडल केवल जनरेटेड डेटा पर तर्क करता है — लाइसेंस तथ्य नहीं गढ़ता। यह आधिकारिक सरकारी पोर्टल नहीं है।"
             )}
           </p>
           <Link
             href="/how-it-works"
             className="mt-4 inline-flex text-sm font-semibold text-brand-teal hover:underline"
           >
-            {t("Read what is real →", "क्या असली है पढ़ें →")}
+            {t("Read architecture & what is real →", "आर्किटेक्चर एवं वास्तविकता पढ़ें →")}
           </Link>
+        </section>
+
+        {/* Architecture */}
+        <section className="mt-16">
+          <p className="text-xs font-semibold uppercase tracking-wider text-teal-700">
+            {t("System architecture", "सिस्टम आर्किटेक्चर")}
+          </p>
+          <h2 className="mt-2 text-2xl font-bold text-teal-950">
+            {t("How the assistance layer operates", "सहायता परत कैसे कार्य करती है")}
+          </h2>
+          <div className="mt-6 grid gap-3 md:grid-cols-4">
+            {[
+              {
+                n: "01",
+                t: t("Citizen intent", "नागरिक आशय"),
+                b: t("Free text or voice in Hindi / English", "हिंदी / अंग्रेज़ी में मुक्त पाठ या आवाज़"),
+              },
+              {
+                n: "02",
+                t: t("Synthetic Citizen Engine", "सिंथेटिक सिटीजन इंजन"),
+                b: t("Deterministic profile from any DL string", "किसी भी DL से निश्चित प्रोफ़ाइल"),
+              },
+              {
+                n: "03",
+                t: t("Eligibility analyst", "पात्रता विश्लेषक"),
+                b: t("CMV-style rules before filing", "फाइलिंग से पहले CMV-शैली नियम"),
+              },
+              {
+                n: "04",
+                t: t("Encoded tracker", "एन्कोडेड ट्रैकर"),
+                b: t("PS-ID carries status · zero database", "PS-ID में स्थिति · शून्य database"),
+              },
+            ].map((s) => (
+              <div key={s.n} className="rounded-2xl border border-dashed border-teal-200 bg-teal-50/30 p-4">
+                <p className="font-mono text-xs text-teal-600">{s.n}</p>
+                <p className="mt-1 font-semibold text-teal-950">{s.t}</p>
+                <p className="mt-1 text-xs text-slate-600">{s.b}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-teal-950">
+            {t("Frequently asked questions", "अक्सर पूछे जाने वाले प्रश्न")}
+          </h2>
+          <div className="mt-6 space-y-3">
+            {[
+              {
+                q: t("Is this an official government website?", "क्या यह आधिकारिक सरकारी वेबसाइट है?"),
+                a: t(
+                  "No. It is an independent hackathon prototype with synthetic data. Not affiliated with Parivahan Sewa, MoRTH, or Government of India.",
+                  "नहीं। यह सिंथेटिक डेटा वाला स्वतंत्र हैकथॉन प्रोटोटाइप है। परिवहन सेवा, MoRTH या भारत सरकार से संबद्ध नहीं।"
+                ),
+              },
+              {
+                q: t("Do I need a real driving licence number?", "क्या वास्तविक ड्राइविंग लाइसेंस नंबर चाहिए?"),
+                a: t(
+                  "No. Enter any string — even invented. The Synthetic Citizen Engine produces a consistent mock profile for testing.",
+                  "नहीं। कोई भी स्ट्रिंग दर्ज करें — काल्पनिक भी। परीक्षण हेतु Synthetic Citizen Engine एक सुसंगत मॉक प्रोफ़ाइल बनाता है।"
+                ),
+              },
+              {
+                q: t("Are payments or OTPs real?", "क्या भुगतान या OTP वास्तविक हैं?"),
+                a: t(
+                  "No. Fees, slots, filing and documents are mocked and clearly labelled.",
+                  "नहीं। शुल्क, स्लॉट, फाइलिंग और दस्तावेज़ मॉक हैं तथा स्पष्ट रूप से चिह्नित।"
+                ),
+              },
+            ].map((f) => (
+              <details
+                key={f.q}
+                className="group rounded-2xl border border-teal-100 bg-white px-5 py-4 open:shadow-sm"
+              >
+                <summary className="cursor-pointer list-none font-semibold text-teal-950 marker:content-none">
+                  {f.q}
+                </summary>
+                <p className="mt-2 text-sm text-slate-600">{f.a}</p>
+              </details>
+            ))}
+          </div>
         </section>
       </main>
     </>

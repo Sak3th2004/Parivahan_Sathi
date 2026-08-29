@@ -267,25 +267,25 @@ export function EmptyChatHints({
 }) {
   const hints = [
     {
-      title: "DL expired months ago",
-      text: "My license expired, DL number MH14-99887766 — can you renew it?",
+      title: "Licence renewal",
+      text: "My driving licence MH14-99887766 has expired. Please assist with renewal.",
       icon: AlertTriangle,
     },
     {
-      title: "Bought a used car",
-      text: "I bought a used car, need ownership transfer. DL TS09ZZ0001",
+      title: "Ownership transfer",
+      text: "I purchased a used vehicle. DL TS09ZZ0001. Please assist with ownership transfer.",
       icon: Sparkles,
     },
     {
-      title: "Moved houses",
-      text: "I moved to a new address, need DL and RC address change. DL KA05MZ4321",
+      title: "Address update",
+      text: "I require DL and RC address update. DL KA05MZ4321.",
       icon: MapPin,
     },
   ];
   return (
     <div className="mx-auto max-w-md space-y-3 py-6">
       <p className="text-center text-sm text-slate-500">
-        Speak or type freely — any DL works. Or tap a starter:
+        Enter your request in Hindi or English. Any DL number is accepted for this prototype.
       </p>
       {hints.map((h) => (
         <button

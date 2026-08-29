@@ -3,6 +3,7 @@ import { Inter, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
+import { AccessibilityBar } from "@/components/AppHeader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${notoDevanagari.variable}`}>
       <body className="font-sans antialiased ps-atmosphere min-h-screen text-teal-950">
         <LanguageProvider>
+          <AccessibilityBar />
           <DisclaimerBar />
           {children}
         </LanguageProvider>

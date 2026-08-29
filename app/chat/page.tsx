@@ -66,9 +66,11 @@ function ChatInner() {
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-3 pb-3 sm:px-4">
         <div className="mb-2 mt-3 flex items-center justify-between rounded-2xl border border-teal-100/80 bg-white/70 px-3 py-2 backdrop-blur">
           <div>
-            <p className="text-sm font-semibold text-teal-950">Sathi desk</p>
+            <p className="text-sm font-semibold text-teal-950">
+              {t("Citizen assistance", "नागरिक सहायता")}
+            </p>
             <p className="text-[11px] text-slate-500">
-              {t("Open conversation · any DL", "खुली बातचीत · कोई भी DL")}
+              {t("Professional help desk · any DL", "पेशेवर सहायता कक्ष · कोई भी DL")}
             </p>
           </div>
           <Button
