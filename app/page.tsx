@@ -38,7 +38,7 @@ export default function LandingPage() {
         {/* Hero */}
         <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
           >
@@ -96,7 +96,7 @@ export default function LandingPage() {
 
           {/* Product mock card */}
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
+            initial={false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.12, duration: 0.5 }}
             className="relative"
@@ -136,7 +136,7 @@ export default function LandingPage() {
 
         {/* Open entry */}
         <motion.section
-          initial={{ opacity: 0, y: 12 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="mx-auto mt-14 max-w-2xl"
