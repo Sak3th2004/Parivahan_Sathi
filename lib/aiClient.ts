@@ -46,13 +46,12 @@ export const openai = createOpenAI({
 });
 
 function modelChain(): string[] {
-  const chain = [PRIMARY_MODEL];
-  if (SECONDARY_MODEL && !chain.includes(SECONDARY_MODEL)) chain.push(SECONDARY_MODEL);
-  // Mid paid tier before mini — still cheaper than flagship if primary fails
-  for (const mid of ["gpt-4.1-mini", FALLBACK_MODEL]) {
-    if (mid && !chain.includes(mid)) chain.push(mid);
+  // Exactly 3 slots: free/advanced primary → secondary → paid mini ($5 shield)
+  const chain: string[] = [];
+  for (const id of [PRIMARY_MODEL, SECONDARY_MODEL, FALLBACK_MODEL]) {
+    if (id && !chain.includes(id)) chain.push(id);
   }
-  return chain;
+  return chain.slice(0, 3);
 }
 
 export function getModelChain() {
