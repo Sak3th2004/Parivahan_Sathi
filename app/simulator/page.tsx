@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/components/LanguageContext";
 import { generateCitizen } from "@/lib/syntheticCitizenEngine";
+import { validateDlInput } from "@/lib/dlValidation";
 
 /** Pure client eligibility — no API spend (mirrors agentTools deterministic path) */
 function localEligibility(dl: string, service: string) {
@@ -59,15 +60,27 @@ const SERVICES = [
 ] as const;
 
 export default function SimulatorPage() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [step, setStep] = useState(0);
   const [dl, setDl] = useState("");
   const [service, setService] = useState<string>("dl_renewal");
+  const [dlError, setDlError] = useState<string | null>(null);
 
   const result = useMemo(() => {
-    if (dl.trim().length < 3) return null;
-    return localEligibility(dl, service);
+    const v = validateDlInput(dl);
+    if (!v.ok) return null;
+    return localEligibility(v.normalized, service);
   }, [dl, service]);
+
+  function goFromDl() {
+    const v = validateDlInput(dl);
+    if (!v.ok) {
+      setDlError(lang === "hi" ? v.reasonHi : v.reason);
+      return;
+    }
+    setDlError(null);
+    setStep(1);
+  }
 
   return (
     <>
@@ -103,19 +116,19 @@ export default function SimulatorPage() {
           {step === 0 && (
             <div className="space-y-3">
               <label className="text-sm font-medium text-teal-950">
-                {t("Your DL number (any string)", "आपका DL नंबर (कोई भी स्ट्रिंग)")}
+                {t("Your DL number", "आपका DL नंबर")}
               </label>
               <Input
                 value={dl}
-                onChange={(e) => setDl(e.target.value)}
-                placeholder="e.g. MH14-99887766 or invent one"
+                onChange={(e) => {
+                  setDl(e.target.value);
+                  setDlError(null);
+                }}
+                placeholder="e.g. MH14-99887766 — not a website URL"
                 className="font-mono"
               />
-              <Button
-                className="bg-brand-teal text-white hover:bg-teal-800"
-                disabled={dl.trim().length < 3}
-                onClick={() => setStep(1)}
-              >
+              {dlError && <p className="text-sm text-amber-800">{dlError}</p>}
+              <Button className="bg-brand-teal text-white hover:bg-teal-800" onClick={goFromDl}>
                 Continue →
               </Button>
             </div>
@@ -212,7 +225,11 @@ export default function SimulatorPage() {
               <div className="flex flex-wrap gap-2">
                 <Link
                   href={`/chat?q=${encodeURIComponent(
-                    `Please assist with ${service.replace(/_/g, " ")}. My DL is ${dl.trim()}.`
+                    (() => {
+                      const v = validateDlInput(dl);
+                      const id = v.ok ? v.normalized : dl.trim();
+                      return `Please assist with ${service.replace(/_/g, " ")}. My DL is ${id}.`;
+                    })()
                   )}`}
                   className="rounded-md bg-brand-teal px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800"
                 >
@@ -223,6 +240,7 @@ export default function SimulatorPage() {
                   onClick={() => {
                     setStep(0);
                     setDl("");
+                    setDlError(null);
                   }}
                 >
                   Reset simulator

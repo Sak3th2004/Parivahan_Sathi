@@ -3,19 +3,32 @@ import { z } from "zod";
 import { generateCitizen } from "./syntheticCitizenEngine";
 import { encodeApplication, decodeApplication, computeTimeline } from "./applicationCodec";
 import { generateWithFallback } from "./aiClient";
+import { validateDlInput } from "./dlValidation";
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export const agentTools = {
   get_citizen_profile: tool({
     description:
-      "Fetch or generate the citizen's DL/RC profile for ANY DL number the user provides — works for any input, generating a consistent demo profile. Call this first once you have a DL number.",
+      "Fetch or generate the citizen's DL/RC profile for a driving licence number. Do NOT pass website URLs or localhost. Call only after the user gave a DL-like value.",
     parameters: z.object({
-      dlNumber: z.string().min(3).describe("Any DL number string the user gave, even informal"),
+      dlNumber: z
+        .string()
+        .min(3)
+        .describe("Driving licence number only — never a URL or localhost address"),
     }),
     execute: async ({ dlNumber }) => {
-      await delay(600);
-      return generateCitizen(dlNumber);
+      await delay(400);
+      const v = validateDlInput(dlNumber);
+      if (!v.ok) {
+        return {
+          error: true,
+          code: "invalid_dl_input",
+          message: v.reason,
+          messageHi: v.reasonHi,
+        };
+      }
+      return generateCitizen(v.normalized);
     },
   }),
 
@@ -34,7 +47,11 @@ export const agentTools = {
     }),
     execute: async ({ dlNumber, service }) => {
       await delay(1000);
-      const c = generateCitizen(dlNumber);
+      const v = validateDlInput(dlNumber);
+      if (!v.ok) {
+        return { error: true, code: "invalid_dl_input", message: v.reason };
+      }
+      const c = generateCitizen(v.normalized);
 
       const rules = `You are an RTO Eligibility Analyst. Apply Central Motor Vehicles Rules.
 

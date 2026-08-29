@@ -28,6 +28,18 @@ export function ToolResultCards({
   const r = asRec(result);
   if (!r) return null;
 
+  if (r.error && r.code === "invalid_dl_input") {
+    return (
+      <motion.div
+        initial={false}
+        className="mt-2 max-w-md rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+      >
+        <p className="font-semibold">Invalid licence input</p>
+        <p className="mt-1 text-xs">{String(r.message || "")}</p>
+      </motion.div>
+    );
+  }
+
   if (toolName === "get_citizen_profile") {
     const dl = asRec(r.dl);
     const docs = asRec(r.documents);

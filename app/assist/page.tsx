@@ -8,26 +8,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/components/LanguageContext";
 import { generateCitizen } from "@/lib/syntheticCitizenEngine";
+import { validateDlInput } from "@/lib/dlValidation";
 
 export default function AssistPage() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const router = useRouter();
   const [dl, setDl] = useState("");
-  const [need, setNeed] = useState("renew my driving licence");
+  const [need, setNeed] = useState("Please assist with renewing my driving licence");
   const [previewed, setPreviewed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const profile = useMemo(() => {
-    if (!previewed || dl.trim().length < 3) return null;
-    return generateCitizen(dl);
+    if (!previewed) return null;
+    const v = validateDlInput(dl);
+    if (!v.ok) return null;
+    return generateCitizen(v.normalized);
   }, [dl, previewed]);
 
   function preview() {
-    if (dl.trim().length < 3) return;
+    const v = validateDlInput(dl);
+    if (!v.ok) {
+      setError(lang === "hi" ? v.reasonHi : v.reason);
+      setPreviewed(false);
+      return;
+    }
+    setError(null);
     setPreviewed(true);
   }
 
   function continueChat() {
-    const q = `${need}. My DL number is ${dl.trim()}.`;
+    const v = validateDlInput(dl);
+    if (!v.ok) {
+      setError(lang === "hi" ? v.reasonHi : v.reason);
+      return;
+    }
+    const q = `${need}. My DL number is ${v.normalized}.`;
     router.push(`/chat?q=${encodeURIComponent(q)}`);
   }
 
@@ -62,15 +77,17 @@ export default function AssistPage() {
               onChange={(e) => {
                 setDl(e.target.value);
                 setPreviewed(false);
+                setError(null);
               }}
-              placeholder="Invent any value, e.g. RJ14-DEMO-7788"
+              placeholder="e.g. MH14-99887766 (not a website URL)"
             />
             <p className="mt-1 text-xs text-slate-500">
               {t(
-                "No format validation — unusual input still produces a usable mock profile.",
-                "कोई प्रारूप बाध्यता नहीं — असामान्य इनपुट पर भी मॉक प्रोफ़ाइल बनती है।"
+                "Invent a DL with letters and numbers. Do not paste localhost or website links.",
+                "अक्षरों और अंकों वाला DL बनाएँ। localhost या वेबसाइट लिंक न चिपकाएँ।"
               )}
             </p>
+            {error && <p className="mt-2 text-sm text-amber-800">{error}</p>}
           </div>
 
           <div>
@@ -82,10 +99,18 @@ export default function AssistPage() {
               value={need}
               onChange={(e) => setNeed(e.target.value)}
             >
-              <option value="renew my driving licence">Licence renewal</option>
-              <option value="transfer vehicle ownership">Ownership transfer</option>
-              <option value="update address on my driving licence">DL address update</option>
-              <option value="update address on both DL and RC">Combined address update</option>
+              <option value="Please assist with renewing my driving licence">
+                Licence renewal
+              </option>
+              <option value="Please assist with vehicle ownership transfer">
+                Ownership transfer
+              </option>
+              <option value="Please assist with updating the address on my driving licence">
+                DL address update
+              </option>
+              <option value="Please assist with updating address on both DL and RC">
+                Combined address update
+              </option>
             </select>
           </div>
 
