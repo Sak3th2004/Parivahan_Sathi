@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-teal: #0f766e;
+  --brand-amber: #f59e0b;
+  --brand-bg: #f0fdfa;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--brand-bg);
+  color: #0f172a;
+}
+
+/* Soft atmospheric background — not flat */
+.ps-atmosphere {
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(15, 118, 110, 0.18), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(245, 158, 11, 0.12), transparent 50%),
+    linear-gradient(180deg, #f0fdfa 0%, #ecfeff 40%, #f8fafc 100%);
+}
