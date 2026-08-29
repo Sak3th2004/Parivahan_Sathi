@@ -1,9 +1,7 @@
-import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
 import { agentTools } from "@/lib/agentTools";
-import { PRIMARY_MODEL, FALLBACK_MODEL, getModelChain } from "@/lib/aiClient";
+import { streamWithResolvedModel, getModelChain } from "@/lib/aiClient";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const SYSTEM_PROMPT = `You are Parivahan Sathi — an AI assistant for Indian RTO services (DL renewal, vehicle ownership transfer, address changes). This is an OPEN DEMO — the user may type absolutely anything, in any language, in any order. You must handle it gracefully, never break, never require a specific script.
@@ -50,48 +48,30 @@ Out of scope: "This demo covers DL renewal, address changes, and ownership trans
 
 Never use markdown. Voice-first, conversational, robust to anything the user types.`;
 
-async function streamWithModel(modelId: string, messages: Parameters<typeof streamText>[0]["messages"]) {
-  return streamText({
-    model: openai(modelId),
-    system: SYSTEM_PROMPT,
-    messages: messages!,
-    tools: agentTools,
-    maxSteps: 8,
-    temperature: 0.3,
-  });
-}
-
 export async function POST(req: Request) {
-  const { messages } = await req.json();
-  const chain = getModelChain();
-
-  let lastError: unknown;
-  for (let i = 0; i < chain.length; i++) {
-    const modelId = chain[i];
-    try {
-      const result = await streamWithModel(modelId, messages);
-      if (i > 0) {
-        console.warn(`[agent] streaming with fallback model: ${modelId}`);
-      }
-      return result.toDataStreamResponse();
-    } catch (err) {
-      lastError = err;
-      console.warn(
-        `[agent] model ${modelId} failed, trying next:`,
-        err instanceof Error ? err.message : err
-      );
-    }
-  }
-
-  // Last resort: try FALLBACK_MODEL once more with primary label for clarity
   try {
-    const result = await streamWithModel(FALLBACK_MODEL || PRIMARY_MODEL, messages);
-    return result.toDataStreamResponse();
-  } catch {
+    const { messages } = await req.json();
+    console.warn(`[agent] model chain: ${getModelChain().join(" → ")}`);
+
+    const { modelId, result } = await streamWithResolvedModel(
+      messages,
+      SYSTEM_PROMPT,
+      agentTools
+    );
+    console.warn(`[agent] streaming with: ${modelId}`);
+
+    return result.toDataStreamResponse({
+      getErrorMessage: (err) => {
+        console.error("[agent] stream error:", err);
+        return "Assistant hit a temporary error. Please send your message again.";
+      },
+    });
+  } catch (err) {
+    console.error("[agent] fatal:", err);
     return new Response(
       JSON.stringify({
         error: "All models unavailable. Please try again in a moment.",
-        detail: lastError instanceof Error ? lastError.message : String(lastError),
+        detail: err instanceof Error ? err.message : String(err),
       }),
       { status: 503, headers: { "Content-Type": "application/json" } }
     );
